@@ -8,8 +8,7 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         if ($request->wantsJson()) {
             return response(
                 $request->user()->cart()->get()
@@ -20,8 +19,7 @@ class CartController extends Controller
         return view('cart.index')->with(compact('products', 'carts'));
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $request->validate([
             'barcode' => 'required|exists:products,barcode',
         ]);
@@ -54,8 +52,7 @@ class CartController extends Controller
         return response('', 204);
     }
 
-    public function changeQty(Request $request)
-    {
+    public function changeQty(Request $request) {
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1',
@@ -73,8 +70,7 @@ class CartController extends Controller
         ]);
     }
 
-    public function delete(Request $request)
-    {
+    public function delete(Request $request) {
         $request->validate([
             'product_id' => 'required|integer|exists:products,id'
         ]);
@@ -83,8 +79,7 @@ class CartController extends Controller
         return response('', 204);
     }
 
-    public function empty(Request $request)
-    {
+    public function empty(Request $request) {
         $request->user()->cart()->detach();
 
         return response('', 204);

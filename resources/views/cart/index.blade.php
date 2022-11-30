@@ -33,7 +33,7 @@
                             <tr>
                                 <td>{{ $cart->name }}</td>
                                 <td>
-                                    <input type="text" class="form-control form-control-sm qty" value="{{ $cart->pivot->quantity }}">
+                                    <input type="text" class="form-control form-control-sm qty" value="{{ $cart->pivot->quantity }}" data-id="{{ $cart->id }}">
                                     <button class="btn btn-danger btn-sm btn-delete" data-url="{{route('cart.delete')}}" data-id="{{ $cart->id }}">
                                         <i class="fas fa-trash"></i>
                                     </button>
@@ -127,6 +127,37 @@
                         icon: 'success',
                         title: 'Success',
                         text: 'Delete successfully!'
+                    }).then((result) => {                        
+                        if (result.isConfirmed) {                            
+                            location.reload();
+                        }                        
+                    })                    
+                },
+                fail: function (res) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!'
+                    })
+                }
+            })
+        })
+
+        $(document).on('change', '.qty' , function () {
+            $this = $(this);            
+            $.ajax({
+                url     :'cart/change-qty',
+                type    :'POST',
+                data    :{
+                    "_token": "{{ csrf_token() }}",
+                    "product_id": $this.data('id'),
+                    "quantity": $this.val()
+                },
+                success :function (res) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Update quantity successfully!'
                     }).then((result) => {                        
                         if (result.isConfirmed) {                            
                             location.reload();
